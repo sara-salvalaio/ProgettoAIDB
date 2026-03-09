@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Companion</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        #chat { border: 1px solid black; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
+        .user { font-weight: bold; color: red; }
+        .ai { color: royalblue; }
+    </style>
+</head>
+<body>
+    <h1>Chat con AI</h1>
+    <div id="chat"></div>
+    <input type="text" id="input" placeholder="Scrivi una domanda..." style="width: 80%;">
+    <button onclick="sendMessage()">Invia</button>
+    
+
+    <script>
+        const chat = document.getElementById('chat');
+
+        function addMessage(sender, text) {
+            const msg = document.createElement('div');
+            msg.className = sender;
+            msg.textContent = `${sender === 'user' ? 'Tu' : 'AI'}: ${text}`;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage('user', message);
+            input.value = '';
+
+            const response = await fetch('http://localhost:9000/ProgettoAIDB', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            
+            const data = await response.json();
+            if(response.ok){
+                addMessage('ai', data.answer);
+            }else{
+                addMessage('ai', "errore");
+            }
+            
+        }
+
+
+    </script>
+</body>
+</html>
