@@ -4,7 +4,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import InMemoryVectorStore
 
 #carico il documento
-loader = PyPDFLoader("vs/data/_Ricetta del Tiramisù provaDB.pdf")
+loader = PyPDFLoader("vs/data/ricettarioDB.pdf")
 docs = loader.load()
 print("documenti caricati",len(docs))
 
